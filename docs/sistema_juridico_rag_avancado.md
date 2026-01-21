@@ -18,6 +18,152 @@ Uma arquitetura de 4 camadas que combina:
 
 ---
 
+## 📌 Resumo Executivo (para rápida compreensão)
+
+Este projeto implementa um **Sistema Jurídico RAG Unificado** que integra extração estruturada, indexação por raciocínio, busca híbrida e auditoria completa para documentos jurídicos brasileiros. O foco é preservar hierarquia e contexto (artigos, parágrafos, incisos), superar limitações de RAGs vetoriais tradicionais e garantir rastreabilidade ponta a ponta com logs auditáveis e metadados de fonte.
+
+### Problema Central Resolvido
+Documentos jurídicos brasileiros possuem **estrutura hierárquica complexa** e **dependências contextuais** que são frequentemente perdidas em chunking tradicional. O sistema resolve isso com extração estruturada, chunking semântico e indexação PageIndex, mantendo integridade e rastreabilidade.
+
+---
+
+## 🧱 Arquitetura de 4 Camadas (Visão Detalhada)
+
+### 1) Camada de Orquestração (`SistemaJuridicoUnificado`)
+**Responsabilidade:** Coordenação do pipeline completo (extração → chunking → indexação → consulta).  
+**Justificativa:**
+- Centraliza o fluxo e o tratamento de erros.
+- Simplifica a interface via padrão *Facade*.
+- Gerencia dependências entre componentes.
+
+```python
+class SistemaJuridicoUnificado:
+    # Orquestra o fluxo completo e expõe uma interface única
+    ...
+```
+
+### 2) Camada de Serviços MCP
+**Responsabilidade:** Integração padronizada com serviços especializados.  
+**Justificativa:**
+- MCP permite evolução desacoplada e integração com PageIndex/ChatIndex.
+- Prepara o sistema para expansão com novos serviços MCP.
+
+```python
+self.mcp_servers = {
+    "pageindex": {"tipo": "http", "url": "https://chat.pageindex.ai/mcp"},
+    "chatindex": {"tipo": "local", "path": self.config["chatindex_dir"]}
+}
+```
+
+### 3) Camada de Processamento
+**Responsabilidade:** Transformação inteligente de documentos.  
+**Componentes:**
+- **SistemaExtracaoDocling**: preserva estrutura e semântica.
+- **SistemaChunkingSemantico**: evita quebras de contexto.
+- **SistemaScrapingJuridico**: coleta fontes oficiais.
+
+**Justificativa:**
+- Pipeline modular substituível.
+- Preserva estrutura jurídica e metadados críticos.
+
+### 4) Camada de Persistência (Google Drive)
+**Responsabilidade:** Armazenamento estruturado e auditável.  
+**Justificativa:**
+- Persistência entre sessões do Colab.
+- Estrutura refletindo o fluxo de processamento.
+- Auditoria completa e fácil recuperação.
+
+```
+Juridico_Unificado/
+├── 01_PageIndex/
+├── 02_ChatIndex/
+├── 03_Docling_Output/
+├── 04_Integracoes/
+└── 05_Auditoria/
+```
+
+---
+
+## 🔎 Componentes Críticos (Explicação Rápida)
+
+### 1) Extração com Docling
+**Problema:** PDFs jurídicos têm OCR complexo, tabelas e referências cruzadas.  
+**Solução:** Extração estruturada com preservação de hierarquia.
+
+### 2) Chunking Semântico
+**Problema:** Chunking tradicional quebra frases e referências legais.  
+**Solução:** Estratégias hierárquicas por seções/blocos semânticos com validação de qualidade.
+
+### 3) Auditoria Unificada
+**Problema:** Exigência de rastreabilidade e reprodutibilidade.  
+**Solução:** Hash chain, logs imutáveis e exportação para perícia.
+
+### 4) Scraping Jurídico
+**Problema:** Sites oficiais usam JS pesado e layouts inconsistentes.  
+**Solução:** Coleta assíncrona com rate limiting, cache e fallbacks.
+
+---
+
+## 🔁 Fluxo de Dados Principal (Resumo)
+
+### Fase 1: Ingestão e Processamento
+```
+Documento PDF/Word/HTML
+        ↓
+[Docling] Extração estruturada
+        ↓
+[Chunking] Divisão semântica
+        ↓
+[PageIndex] Indexação hierárquica
+        ↓
+[Google Drive] Armazenamento auditável
+```
+
+### Fase 2: Consulta e Resposta
+```
+Consulta do usuário
+        ↓
+[Scraping] Fontes oficiais / Busca local
+        ↓
+[LLM + Contexto] Geração da resposta
+        ↓
+[Auditoria] Registro completo
+```
+
+---
+
+## ⚙️ Decisões de Arquitetura Importantes
+
+1. **Assíncrono por design**: evita bloqueios em scraping/Drive e melhora throughput.  
+2. **Fallbacks robustos**: mantém disponibilidade em ambiente Colab.  
+3. **Configuração externa**: ajustes sem recompilação e fácil serialização.  
+4. **Injeção de dependências**: facilita testes e troca de componentes.
+
+---
+
+## 📈 Considerações para Evolução
+
+**Escalabilidade**
+- Filas de processamento (Redis/Celery).
+- Cache distribuído e workers especializados.
+
+**Segurança**
+- Keys em variáveis de ambiente.
+- Logs para compliance.
+
+**Manutenibilidade**
+- Tipagem, docstrings e logging estruturado.
+
+**Extensibilidade**
+- Novas fontes/scrapers, novos MCPs e novos formatos.
+
+---
+
+## ✅ Conclusão
+Este sistema fornece uma base robusta e auditável para RAG jurídico com preservação de contexto, qualidade de resposta e rastreabilidade. A arquitetura já resolve o ponto mais crítico — **manter a hierarquia jurídica durante o processamento** — e está pronta para evoluir para produção com monitoramento, cache distribuído e integrações reais.
+
+---
+
 ## 🏗️ Arquitetura de 4 Camadas - Justificativa Técnica
 
 ### Camada 1: Orquestração (`SistemaJuridicoUnificado`)
