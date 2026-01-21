@@ -1,15 +1,15 @@
-# 📋 Documentação Técnica Completa - Sistema Jurídico RAG Avançado
+# 📋 **DOCUMENTAÇÃO TÉCNICA COMPLETA - SISTEMA JURÍDICO RAG AVANÇADO**
 
-## 🎯 Visão Geral do Projeto
+## 🎯 **VISÃO GERAL DO PROJETO**
 
-### Problema Central a Ser Resolvido
+### **Problema Central a Ser Resolvido**
 Desenvolver um sistema jurídico inteligente que supere as limitações dos RAGs tradicionais, especialmente em documentos jurídicos brasileiros onde:
 - **Estrutura hierárquica** é fundamental (artigos, parágrafos, incisos)
 - **Contexto jurídico completo** não pode ser quebrado arbitrariamente
 - **Fontes oficiais** (STF, STJ, Planalto) são dinâmicas e exigem atualização constante
 - **Rastreabilidade** e **auditoria** são requisitos legais obrigatórios
 
-### Solução Proposta
+### **Solução Proposta**
 Uma arquitetura de 4 camadas que combina:
 1. **Extração inteligente** com preservação estrutural (Docling)
 2. **Indexação baseada em raciocínio** (PageIndex) em vez de similaridade vetorial
@@ -18,174 +18,14 @@ Uma arquitetura de 4 camadas que combina:
 
 ---
 
-## 📌 Resumo Executivo (para rápida compreensão)
+## 🏗️ **ARQUITETURA DE 4 CAMADAS - JUSTIFICATIVA TÉCNICA**
 
-Este projeto implementa um **Sistema Jurídico RAG Unificado** que integra extração estruturada, indexação por raciocínio, busca híbrida e auditoria completa para documentos jurídicos brasileiros. O foco é preservar hierarquia e contexto (artigos, parágrafos, incisos), superar limitações de RAGs vetoriais tradicionais e garantir rastreabilidade ponta a ponta com logs auditáveis e metadados de fonte.
-
-### Problema Central Resolvido
-Tradicionalmente, sistemas RAG baseados em vetores enfrentam limitações na compreensão de documentos jurídicos complexos, onde a relevância contextual é mais importante que a similaridade semântica. Documentos jurídicos possuem estruturas hierárquicas complexas (capítulos, artigos, parágrafos, incisos) que são frequentemente perdidas em abordagens convencionais de chunking. O sistema resolve isso com extração estruturada, chunking semântico e indexação PageIndex, mantendo integridade e rastreabilidade.
-
----
-
-## 🧱 Arquitetura de 4 Camadas (Visão Detalhada)
-
-### 1) Camada de Orquestração (`SistemaJuridicoUnificado`)
-**Responsabilidade:** Coordenação de todos os componentes do sistema.  
-**Justificativa:**
-- Centraliza o controle do pipeline de processamento.
-- Gerencia dependências entre componentes.
-- Fornece interface única para operações do sistema.
-- Implementa tratamento de erros consistente.
-
-```python
-class SistemaJuridicoUnificado:
-    # Orquestra o fluxo completo e expõe uma interface única
-    ...
-```
-
-### 2) Camada de Serviços MCP
-**Responsabilidade:** Integração com protocolos especializados.  
-**Justificativa:**
-- MCP (Model Context Protocol) permite integração padronizada com ferramentas especializadas.
-- PageIndex oferece busca baseada em raciocínio (não apenas similaridade vetorial).
-- ChatIndex gerencia contexto de conversas longas preservando histórico.
-- Arquitetura preparada para extensão com novos serviços MCP.
-
-```python
-self.mcp_servers = {
-    "pageindex": {"tipo": "http", "url": "https://chat.pageindex.ai/mcp"},
-    "chatindex": {"tipo": "local", "path": self.config["chatindex_dir"]}
-}
-```
-
-### 3) Camada de Processamento
-**Responsabilidade:** Pipeline inteligente de transformação de documentos.  
-**Componentes:**
-- **SistemaExtracaoDocling**: preserva estrutura e semântica.
-- **SistemaChunkingSemantico**: evita quebras de contexto.
-- **SistemaScrapingJuridico**: coleta fontes oficiais.
-
-**Justificativa:**
-- Pipeline modular permite substituição de componentes individuais.
-- Cada etapa especializada em uma transformação específica.
-- Preservação máxima da estrutura original dos documentos.
-
-### 4) Camada de Persistência (Google Drive)
-**Responsabilidade:** Armazenamento estruturado e auditável.  
-**Justificativa:**
-- Google Drive fornece persistência entre sessões do Colab.
-- Estrutura de diretórios reflete o fluxo de processamento.
-- Auditabilidade completa de todas as operações.
-- Facilidade de backup e recuperação.
-
-```
-Juridico_Unificado/
-├── 01_PageIndex/
-├── 02_ChatIndex/
-├── 03_Docling_Output/
-├── 04_Integracoes/
-└── 05_Auditoria/
-```
-
----
-
-## 🔎 Componentes Críticos (Explicação Rápida)
-
-### 1) Extração com Docling
-**Problema Resolvido:** PDFs jurídicos frequentemente contêm estrutura hierárquica complexa, tabelas formatadas, notas de rodapé importantes e referências cruzadas.  
-**Solução:** Extração estruturada com preservação de hierarquia, OCR especializado para português jurídico e fallback robusto quando necessário.
-
-### 2) Chunking Semântico
-**Problema Resolvido:** Chunking tradicional quebra sentenças, referências entre artigos/parágrafos e contexto necessário para interpretação jurídica.  
-**Solução:** Estratégias hierárquicas por seções/blocos semânticos, preservação de parágrafos completos, sobreposição contextual e validação de qualidade.
-
-### 3) Auditoria Unificada
-**Problema Resolvido:** Rastreabilidade completa, reprodutibilidade de análises e compliance com requisitos legais.  
-**Solução:** Hash chain para integridade, logs estruturados por categoria e exportação para auditoria externa.
-
-### 4) Scraping Jurídico
-**Problema Resolvido:** Fontes oficiais têm HTML complexo, exigem JavaScript, possuem limitações de acesso e formatos inconsistentes.  
-**Solução:** Coleta assíncrona com rate limiting, parsing robusto, cache inteligente e dados simulados para desenvolvimento.
-
----
-
-## 🔁 Fluxo de Dados Principal (Resumo)
-
-### Fase 1: Ingestão e Processamento
-```
-Documento PDF/Word/HTML
-        ↓
-[Docling] Extração estruturada
-        ↓
-[Chunking] Divisão semântica
-        ↓
-[PageIndex] Indexação hierárquica
-        ↓
-[Google Drive] Armazenamento auditável
-```
-
-### Fase 2: Consulta e Resposta
-```
-Consulta do usuário
-        ↓
-[Scraping] Fontes oficiais / Busca local
-        ↓
-[LLM + Contexto] Geração da resposta
-        ↓
-[Auditoria] Registro completo
-```
-
----
-
-## ⚙️ Decisões de Arquitetura Importantes
-
-1. **Assíncrono por design**: todas as operações de I/O são assíncronas para reduzir bloqueios e melhorar performance.  
-2. **Fallbacks robustos**: cada componente crítico possui fallback para ambientes Colab.  
-3. **Configuração externa**: separação clara entre configuração e código, com serialização simples.  
-4. **Injeção de dependências**: facilita testes unitários e substituição de componentes.
-
----
-
-## 📈 Considerações para Evolução
-
-**Escalabilidade**
-- Filas de processamento (Redis/Celery).
-- Workers especializados por tipo de documento.
-- Cache distribuído (Redis).
-
-**Segurança**
-- API keys em variáveis de ambiente.
-- Logs completos para compliance.
-
-**Manutenibilidade**
-- Tipagem completa, docstrings detalhadas e logging estruturado.
-
-**Extensibilidade**
-- Novos formatos via parsers no extrator.
-- Novas fontes via scrapers dedicados.
-- Novos MCPs registrados no orquestrador.
-
-### Próximas Evoluções Recomendadas
-1. **Integração real com PageIndex**: usar API key, retry com backoff e cache de respostas.  
-2. **Otimização de performance**: cache LRU, compressão de chunks e pré-processamento assíncrono em lote.  
-3. **Dashboard de monitoramento**: Streamlit/Gradio com métricas e visualização da árvore PageIndex.  
-4. **Validação jurídica**: integração com bases oficiais e verificação de citações.
-
----
-
-## ✅ Conclusão
-Este projeto representa uma implementação de referência para sistemas RAG jurídicos, com arquitetura limpa, robustez operacional (fallbacks), auditoria completa e alta extensibilidade. O maior desafio já resolvido foi a preservação do contexto jurídico durante o chunking. A base está pronta para evoluir para produção com monitoramento, caching distribuído e integrações mais profundas com APIs especializadas.
-
----
-
-## 🏗️ Arquitetura de 4 Camadas - Justificativa Técnica
-
-### Camada 1: Orquestração (`SistemaJuridicoUnificado`)
+### **CAMADA 1: ORQUESTRAÇÃO (`SistemaJuridicoUnificado`)**
 ```python
 class SistemaJuridicoUnificado:
     """
     Ponto único de entrada e coordenação do sistema.
-
+    
     POR QUE ESTA CAMADA É NECESSÁRIA:
     1. Gerenciamento de ciclo de vida de componentes complexos
     2. Coordenação de fluxos de trabalho assíncronos
@@ -199,7 +39,7 @@ class SistemaJuridicoUnificado:
 - **Injeção de Dependências**: Componentes são injetados, não criados internamente
 - **Estado Imutável**: Configuração é carregada uma vez e não modificada em runtime
 
-### Camada 2: Serviços MCP
+### **CAMADA 2: SERVIÇOS MCP**
 ```python
 # Integração com Model Context Protocol
 self.mcp_servers = {
@@ -208,21 +48,21 @@ self.mcp_servers = {
 }
 ```
 
-**Por que MCP é revolucionário:**
-1. **Protocolo padronizado**: Comunicação uniforme entre diferentes serviços
+**POR QUE MCP É REVOLUCIONÁRIO:**
+1. **Protocolo Padronizado**: Comunicação uniforme entre diferentes serviços
 2. **Desacoplamento**: Serviços podem evoluir independentemente
 3. **Interoperabilidade**: Integração com Claude, Cursor, outros agentes
-4. **Abstração de complexidade**: Oculta detalhes de implementação de cada serviço
+4. **Abstração de Complexidade**: Oculta detalhes de implementação de cada serviço
 
-### Camada 3: Processamento
-**Componentes e suas responsabilidades:**
+### **CAMADA 3: PROCESSAMENTO**
+**Componentes e suas Responsabilidades:**
 
-#### 1. SistemaExtracaoDocling
+#### **1. SistemaExtracaoDocling**
 ```python
 class SistemaExtracaoDocling:
     """
     Responsável pela extração estrutural de documentos jurídicos.
-
+    
     PROBLEMAS QUE RESOLVE:
     • PDFs com OCR de baixa qualidade
     • Preservação de hierarquia (Capítulos → Artigos → Parágrafos)
@@ -232,17 +72,17 @@ class SistemaExtracaoDocling:
 ```
 
 **Por que Docling é superior:**
-- **OCR especializado**: Modelos treinados especificamente para documentos
-- **Preservação estrutural**: Mantém relações hierárquicas
+- **OCR Especializado**: Modelos treinados especificamente para documentos
+- **Preservação Estrutural**: Mantém relações hierárquicas
 - **Multimodalidade**: Processa texto, tabelas, imagens em um único pipeline
-- **Suporte a português jurídico**: Otimizado para terminologia legal brasileira
+- **Suporte a Português Jurídico**: Otimizado para terminologia legal brasileira
 
-#### 2. SistemaChunkingSemantico
+#### **2. SistemaChunkingSemantico**
 ```python
 class SistemaChunkingSemantico:
     """
     Sistema avançado de divisão de texto que preserva integridade semântica.
-
+    
     INOVAÇÕES:
     • Evita quebra no meio de sentenças ou parágrafos
     • Considera estrutura jurídica específica
@@ -251,7 +91,7 @@ class SistemaChunkingSemantico:
     """
 ```
 
-**Problema do chunking tradicional:**
+**Problema do Chunking Tradicional:**
 ```python
 # CHUNKING TRADICIONAL (PROBLEMÁTICO):
 texto = "O Art. 1º estabelece o direito. O § 1º complementa..."
@@ -267,12 +107,12 @@ chunks_semanticos = [
 ]
 ```
 
-#### 3. SistemaScrapingJuridico
+#### **3. SistemaScrapingJuridico**
 ```python
 class SistemaScrapingJuridico:
     """
     Coleta dados de fontes jurídicas oficiais brasileiras.
-
+    
     FONTES PRIORITÁRIAS:
     1. STF - Jurisprudência do Supremo Tribunal Federal
     2. Planalto - Legislação federal consolidada
@@ -280,13 +120,13 @@ class SistemaScrapingJuridico:
     """
 ```
 
-**Desafios do scraping jurídico:**
-- **JavaScript pesado**: Sites governamentais usam frameworks modernos
-- **CAPTCHAs e rate limiting**: Medidas anti-bot sofisticadas
-- **Estrutura inconsistente**: Cada site tem seu próprio HTML
-- **Dados dinâmicos**: Jurisprudência atualizada diariamente
+**Desafios do Scraping Jurídico:**
+- **JavaScript Pesado**: Sites governamentais usam frameworks modernos
+- **CAPTCHAs e Rate Limiting**: Medidas anti-bot sofisticadas
+- **Estrutura Inconsistente**: Cada site tem seu próprio HTML
+- **Dados Dinâmicos**: Jurisprudência atualizada diariamente
 
-### Camada 4: Persistência (Google Drive)
+### **CAMADA 4: PERSISTÊNCIA (GOOGLE DRIVE)**
 ```bash
 Juridico_Unificado/
 ├── 01_PageIndex/          # Árvores de raciocínio (estrutura PageIndex)
@@ -296,23 +136,23 @@ Juridico_Unificado/
 └── 05_Auditoria/         # Logs imutáveis e rastreabilidade
 ```
 
-**Por que Google Drive:**
-1. **Persistência entre sessões**: No Colab, o sistema de arquivos é efêmero
-2. **Acesso universal**: Disponível de qualquer lugar
-3. **Versionamento nativo**: Histórico de alterações automático
+**POR QUE GOOGLE DRIVE:**
+1. **Persistência entre Sessões**: No Colab, o sistema de arquivos é efêmero
+2. **Acesso Universal**: Disponível de qualquer lugar
+3. **Versionamento Nativo**: Histórico de alterações automático
 4. **Colaboração**: Múltiplos desenvolvedores podem acessar os dados
-5. **Backup automático**: Redundância garantida pelo Google
+5. **Backup Automático**: Redundância garantida pelo Google
 
 ---
 
-## 🔧 Componentes Críticos - Detalhamento Técnico
+## 🔧 **COMPONENTES CRÍTICOS - DETALHAMENTO TÉCNICO**
 
-### 1. Sistema de Auditoria (`SistemaAuditoriaUnificado`)
+### **1. SISTEMA DE AUDITORIA (`SistemaAuditoriaUnificado`)**
 ```python
 class SistemaAuditoriaUnificado:
     """
     Sistema de logging e rastreabilidade completo.
-
+    
     REQUISITOS JURÍDICOS ATENDIDOS:
     1. Rastreabilidade completa (quem fez o que, quando e por quê)
     2. Imutabilidade dos logs (não podem ser alterados posteriormente)
@@ -321,48 +161,48 @@ class SistemaAuditoriaUnificado:
     """
 ```
 
-**Implementação da imutabilidade:**
+**Implementação da Imutabilidade:**
 ```python
 def registrar_evento(self, categoria: str, evento: Dict[str, Any]) -> str:
     evento_id = f"evt_{hashlib.md5(str(evento).encode()).hexdigest()[:10]}"
-
+    
     # Hash do evento anterior para criar cadeia
     if self.log_central:
         evento["hash_anterior"] = self.hash_registry[self.log_central[-1]["evento_id"]]["hash"]
-
+    
     # Hash do evento atual
     hash_atual = hashlib.md5(json.dumps(evento, sort_keys=True).encode()).hexdigest()
     self.hash_registry[evento_id] = {"hash": hash_atual, "timestamp": evento["timestamp"]}
-
+    
     # Persistência imediata (write-through)
     self._persistir_log(categoria, {**evento, "evento_id": evento_id})
-
+    
     return evento_id
 ```
 
-**Vantagens desta abordagem:**
-- **Cadeia de confiança**: Cada evento referencia o anterior via hash
-- **Detecção de alterações**: Qualquer modificação quebra a cadeia
-- **Auditoria independente**: Terceiros podem verificar integridade sem acesso ao sistema
+**Vantagens desta Abordagem:**
+- **Cadeia de Confiança**: Cada evento referencia o anterior via hash
+- **Detecção de Alterações**: Qualquer modificação quebra a cadeia
+- **Auditoria Independente**: Terceiros podem verificar integridade sem acesso ao sistema
 
-### 2. Chunking Semântico Avançado
-**Algoritmo de decisão de chunking:**
+### **2. CHUNKING SEMÂNTICO AVANÇADO**
+**Algoritmo de Decisão de Chunking:**
 ```python
 def criar_chunks_semanticos(self, extracao: Dict[str, Any], documento_id: str):
     """
     Seleciona estratégia de chunking baseada na análise do documento.
-
+    
     HIERARQUIA DE ESTRATÉGIAS:
     1. Por seções identificadas (ideal para leis e regulamentos)
     2. Por blocos semânticos (para jurisprudência com estrutura menos rígida)
     3. Chunking inteligente (fallback para documentos não estruturados)
     """
-
+    
     # ANÁLISE DO DOCUMENTO
     secoes = extracao.get("secoes", [])
     blocos_semanticos = extracao.get("blocos_semanticos", [])
     texto_completo = extracao.get("texto_completo", "")
-
+    
     # DECISÃO ESTRATÉGICA
     if len(secoes) >= 3:  # Documento bem estruturado
         return self._chunking_por_secoes(secoes, extracao)
@@ -372,26 +212,26 @@ def criar_chunks_semanticos(self, extracao: Dict[str, Any], documento_id: str):
         return self._chunking_inteligente(texto_completo, extracao)
 ```
 
-**Métricas de qualidade de chunks:**
+**Métricas de Qualidade de Chunks:**
 ```python
 def _calcular_score_qualidade(self, chunk: Dict[str, Any]) -> float:
     """
     Calcula score 0-1 baseado em múltiplos critérios:
-
+    
     CRITÉRIOS (pesos):
     1. Tamanho adequado (0.3): Nem muito curto, nem muito longo
     2. Sentenças completas (0.2): Não quebradas no meio
     3. Validação estrutural (0.3): Preserva elementos jurídicos
     4. Densidade lexical (0.2): Informação vs. ruído
-
+    
     Score > 0.7: Chunk de alta qualidade
     Score 0.4-0.7: Chunk aceitável
     Score < 0.4: Chunk precisa ser reprocessado
     """
 ```
 
-### 3. Integração com PageIndex
-**Por que PageIndex é superior a RAGs vetoriais:**
+### **3. INTEGRAÇÃO COM PAGINDEX**
+**Por que PageIndex é Superior a RAGs Vetoriais:**
 ```python
 # RAG VETORIAL TRADICIONAL (problemas):
 # 1. Similaridade ≠ Relevância
@@ -399,14 +239,14 @@ def _calcular_score_qualidade(self, chunk: Dict[str, Any]) -> float:
 # 3. Chunking arbitrário
 # 4. Explicabilidade limitada
 
-# PAGEINDEX (nossa abordagem):
+# PAGINDEX (nossa abordagem):
 # 1. Raciocínio em árvore (como um humano navegaria)
 # 2. Preserva hierarquia natural do documento
 # 3. Busca baseada em contexto, não apenas similaridade
 # 4. Trajetória de busca explicável
 ```
 
-**Estrutura PageIndex gerada:**
+**Estrutura PageIndex Gerada:**
 ```json
 {
   "documento_id": "lei_13105_2015",
@@ -435,39 +275,39 @@ def _calcular_score_qualidade(self, chunk: Dict[str, Any]) -> float:
 }
 ```
 
-### 4. Sistema de Scraping Resiliente
-**Estratégias de fallback:**
+### **4. SISTEMA DE SCRAPING RESILIENTE**
+**Estratégias de Fallback:**
 ```python
 async def buscar_fontes_oficiais(self, consulta: str, max_resultados: int = 10):
     """
     Implementa padrão Circuit Breaker para scraping.
-
+    
     FLUXO:
     1. Tentar scraping real (com timeout curto)
     2. Se falhar, usar cache local (se disponível)
     3. Se cache vazio, gerar dados simulados relevantes
     4. Registrar detalhes da falha para debugging
-
+    
     BENEFÍCIOS:
     • Sistema nunca fica completamente indisponível
     • Usuário sempre recebe alguma resposta
     • Debugging facilitado por logs detalhados
     """
-
+    
     try:
         # TENTATIVA 1: Scraping real
         resultados = await self._scraping_real(consulta, max_resultados)
         if resultados:
             return resultados
-
+        
         # TENTATIVA 2: Cache local
         resultados = self._buscar_cache(consulta)
         if resultados:
             return resultados
-
+        
         # TENTATIVA 3: Dados simulados inteligentes
         return self._gerar_resultados_simulados(consulta)
-
+        
     except Exception as e:
         # LOG DETALHADO PARA DEBUGGING
         self.auditoria.registrar_evento("erros_sistema", {
@@ -477,72 +317,83 @@ async def buscar_fontes_oficiais(self, consulta: str, max_resultados: int = 10):
             "stack_trace": traceback.format_exc(),
             "timestamp": datetime.now().isoformat()
         })
-
+        
         # FALLBACK FINAL
         return [self._resultado_fallback_padrao(consulta)]
 ```
 
 ---
 
-## 🚀 Fluxos de Trabalho Principais
+## 🚀 **FLUXOS DE TRABALHO PRINCIPAIS**
 
-### Fluxo 1: Download e Indexação
+### **FLUXO 1: Processamento de Novo Documento**
 ```
-1. SISTEMA DE DOWNLOAD
-   → Coleta documentos de fontes oficiais (leis, jurisprudência, processos)
-   → Registra metadados de origem e captura
+1. RECEPÇÃO
+   → Documento PDF/Word/HTML é recebido
+   → Hash é calculado para integridade
+   → Metadados básicos são extraídos
 
-2. SISTEMA DE INDEXAÇÃO
-   → Processa documentos brutos
-   → Gera índices PageIndex (árvores hierárquicas) para raciocínio
-   → Gera índices vetoriais (embeddings) para busca semântica
-   → Consolida metadados dos documentos
+2. EXTRAÇÃO ESTRUTURAL (Docling)
+   → OCR especializado (se necessário)
+   → Identificação de hierarquia (Capítulos, Artigos)
+   → Extração de tabelas e imagens com contexto
+   → Normalização de texto jurídico
 
-3. PERSISTÊNCIA
-   → Armazena índices no Google Drive
-   → Armazena embeddings no armazenamento vetorial
+3. CHUNKING SEMÂNTICO
+   → Análise da estrutura identificada
+   → Decisão de estratégia de chunking
+   → Geração de chunks com sobreposição contextual
+   → Validação de qualidade de cada chunk
+
+4. INDEXAÇÃO (PageIndex)
+   → Construção de árvore hierárquica
+   → Mapeamento chunks → nós da árvore
+   → Geração de sumários para cada nó
+   → Otimização para busca por raciocínio
+
+5. PERSISTÊNCIA
+   → Salvar no Google Drive estruturado
+   → Atualizar índices globais
+   → Registrar auditoria completa
+   → Gerar relatório de processamento
 ```
 
-### Fluxo 2: Processamento de Consulta
+### **FLUXO 2: Consulta ao Sistema**
 ```
-1. ENTRADA DO USUÁRIO
-   → Consulta enviada pela interface
-   → Agente RAG identifica área do direito, complexidade e tipo
+1. ANÁLISE DA CONSULTA
+   → Identificação de termos jurídicos
+   → Detecção de área do direito
+   → Expansão de sinônimos e termos relacionados
 
 2. BUSCA HÍBRIDA
-   → PageIndex: busca por raciocínio na árvore
-   → Busca vetorial: similaridade semântica
-   → Combinação e ranqueamento dos resultados
+   → PageIndex: Navegação por raciocínio na árvore
+   → Fontes externas: Scraping em tempo real
+   → Cache local: Documentos já processados
+   → ChatIndex: Histórico de conversas relevantes
 
-3. SÍNTESE E RESPOSTA
-   → Agente sintetiza contexto recuperado
-   → Geração da resposta via LLM com base no contexto
-   → Verificação da resposta contra as fontes
-   → Envio da resposta ao usuário
+3. CONSOLIDAÇÃO
+   → Remoção de duplicatas
+   → Ranqueamento por relevância contextual
+   → Agrupamento por fonte e tipo
+
+4. GERAÇÃO DE RESPOSTA
+   → Contexto estruturado para o LLM
+   → Instruções específicas para resposta jurídica
+   → Validação de fatos e citações
+   → Formatação adequada para o domínio jurídico
+
+5. AUDITORIA
+   → Registro completo da consulta
+   → Log de todas as fontes consultadas
+   → Hash da resposta gerada
+   → Atualização do ChatIndex
 ```
-
-### Fluxo 3: Armazenamento e Auditoria
-```
-1. CACHE E LOGS
-   → Consulta e resposta armazenadas no Cache Inteligente
-   → Logs detalhados no Sistema de Logs
-
-2. BACKUP E RELATÓRIOS
-   → Dados salvos no Google Drive para backup e auditoria
-   → Relatórios gerados pelo Sistema de Monitoramento
-```
-
-### Considerações de Escalabilidade e Performance
-- **Cache Inteligente**: reduz latência para consultas similares e diminui carga nas APIs.
-- **Processamento Paralelo**: download e indexação usam ThreadPoolExecutor para múltiplos documentos.
-- **Arquitetura Modular**: cada componente escala de forma independente (ex.: armazenamento vetorial).
-- **Fallbacks**: múltiplos fallbacks (modelos locais, dados de exemplo) garantem disponibilidade.
 
 ---
 
-## 🔬 Decisões de Design Críticas
+## 🔬 **DECISÕES DE DESIGN CRÍTICAS**
 
-### 1. Por que Assíncrono?
+### **1. Por que Assíncrono?**
 ```python
 # DECISÃO: Todo I/O é assíncrono
 async def processar_documento_completo(self, documento_path: Path):
@@ -553,7 +404,7 @@ async def processar_documento_completo(self, documento_path: Path):
     # 4. Preparação para escalabilidade horizontal
 ```
 
-### 2. Por que Google Drive e não Banco de Dados?
+### **2. Por que Google Drive e não Banco de Dados?**
 ```python
 # VANTAGENS DO GOOGLE DRIVE NO CONTEXTO COLAB:
 # 1. Zero configuração necessária
@@ -573,32 +424,32 @@ async def processar_documento_completo(self, documento_path: Path):
 # • Estrutura de diretórios otimizada
 ```
 
-### 3. Tratamento de Erros em Camadas
+### **3. Tratamento de Erros em Camadas**
 ```python
 # ESTRATÉGIA: Defesa em profundidade
 try:
     # TENTATIVA 1: Método ideal
     resultado = await self._metodo_principal()
-
+    
 except SpecificError1:
     # FALLBACK 1: Método alternativo
     resultado = await self._fallback_1()
-
+    
 except SpecificError2:
     # FALLBACK 2: Dados simulados inteligentes
     resultado = self._gerar_simulacao_inteligente()
-
+    
 except Exception as e:
     # FALLBACK FINAL: Resposta genérica com logging
     self._log_erro_critico(e)
     resultado = self._resposta_de_contigencia()
-
+    
 finally:
     # AUDITORIA: Sempre registrar o que aconteceu
     self.auditoria.registrar_resultado(resultado)
 ```
 
-### 4. Segurança e Privacidade
+### **4. Segurança e Privacidade**
 ```python
 # MEDIDAS IMPLEMENTADAS:
 # 1. Nenhum dado sensível armazenado em texto plano
@@ -610,21 +461,21 @@ finally:
 
 ---
 
-## 📈 Métricas de Sucesso e Monitoramento
+## 📈 **MÉTRICAS DE SUCESSO E MONITORAMENTO**
 
-### Métricas do Sistema
+### **Métricas do Sistema**
 ```python
 ESTATISTICAS_CHAVE = {
     # DESEMPENHO
     "tempo_medio_processamento": "ms por documento",
     "taxa_sucesso_extracao": "% de documentos extraídos com sucesso",
     "tempo_resposta_consulta": "ms por consulta",
-
+    
     # QUALIDADE
     "score_medio_chunks": "0-1 (qualidade dos chunks gerados)",
     "relevancia_respostas": "Avaliação humana/automática",
     "cobertura_fontes": "% de fontes consultadas com sucesso",
-
+    
     # AUDITORIA
     "eventos_registrados": "Total de eventos auditados",
     "integridade_verificada": "% de eventos com hash válido",
@@ -632,11 +483,11 @@ ESTATISTICAS_CHAVE = {
 }
 ```
 
-### Dashboard de Monitoramento (Planejado)
+### **Dashboard de Monitoramento (Planejado)**
 ```python
 # COMPONENTES DO DASHBOARD:
 # 1. Health Check: Status de todos os componentes
-# 2. Métricas em tempo real: Processamento, consultas, erros
+# 2. Métricas em Tempo Real: Processamento, consultas, erros
 # 3. Visualização da Árvore PageIndex: Navegação interativa
 # 4. Logs de Auditoria: Busca e filtragem
 # 5. Estatísticas de Uso: Documentos processados, consultas, etc.
@@ -644,9 +495,9 @@ ESTATISTICAS_CHAVE = {
 
 ---
 
-## 🚧 Próximos Passos e Melhorias
+## 🚧 **PRÓXIMOS PASSOS E MELHORIAS**
 
-### Prioridade 1: Integração Real com APIs
+### **Prioridade 1: Integração Real com APIs**
 ```python
 # ATUAL: Simulação para demonstração
 # PRÓXIMO: Implementação real
@@ -668,7 +519,7 @@ async def _scraping_stf_avancado(self, consulta):
     # Sistema de queue com retry exponencial
 ```
 
-### Prioridade 2: Otimização de Performance
+### **Prioridade 2: Otimização de Performance**
 ```python
 # 1. Cache Distribuído
 class CacheInteligente:
@@ -684,7 +535,7 @@ async def processar_lote_documentos(self, lista_documentos):
     # Retry automático para falhas transitórias
 ```
 
-### Prioridade 3: Validação Jurídica
+### **Prioridade 3: Validação Jurídica**
 ```python
 # 1. Verificador de Citações
 class VerificadorCitacoes:
@@ -703,27 +554,27 @@ class SistemaAlertasJuridicos:
 
 ---
 
-## 🎯 Para o Desenvolvedor Sênior
+## 🎯 **PARA O DESENVOLVEDOR SÊNIOR**
 
-### O Que Este Sistema Representa
-1. **Referência arquitetural**: Como construir sistemas RAG complexos
-2. **Boas práticas**: Tratamento de erros, auditoria, monitoramento
-3. **Integração moderna**: MCP, PageIndex, Docling - stack atualizada
-4. **Foco em domínio específico**: Jurídico brasileiro com suas particularidades
+### **O Que Este Sistema Representa**
+1. **Referência Arquitetural**: Como construir sistemas RAG complexos
+2. **Boas Práticas**: Tratamento de erros, auditoria, monitoramento
+3. **Integração Moderna**: MCP, PageIndex, Docling - stack atualizada
+4. **Foco em Domínio Específico**: Jurídico brasileiro com suas particularidades
 
-### Desafios que Você Enfrentará
-1. **Complexidade assíncrona**: Múltiplas operações concorrentes
+### **Desafios que Você Enfrentará**
+1. **Complexidade Assíncrona**: Múltiplas operações concorrentes
 2. **Resiliência**: Sistema deve funcionar mesmo com componentes falhando
-3. **Auditoria real**: Não apenas logging, mas rastreabilidade completa
+3. **Auditoria Real**: Não apenas logging, mas rastreabilidade completa
 4. **Balanceamento**: Qualidade vs. Performance vs. Custo
 
-### Seu Papel Como Desenvolvedor Sênior
-1. **Mantenedor da arquitetura**: Garantir que novas funcionalidades respeitem os princípios
-2. **Otimizador de performance**: Identificar e resolver gargalos
-3. **Garantia de qualidade**: Implementar testes e monitoramento
-4. **Mentor técnico**: Explicar as decisões arquiteturais para a equipe
+### **Seu Papel Como Desenvolvedor Sênior**
+1. **Mantenedor da Arquitetura**: Garantir que novas funcionalidades respeitem os princípios
+2. **Otimizador de Performance**: Identificar e resolver gargalos
+3. **Garantia de Qualidade**: Implementar testes e monitoramento
+4. **Mentor Técnico**: Explicar as decisões arquiteturais para a equipe
 
-### Perguntas para Reflexão
+### **Perguntas para Reflexão**
 1. Como escalar este sistema para milhares de documentos?
 2. Quais métricas adicionais seriam úteis para monitoramento?
 3. Como implementar A/B testing de diferentes estratégias de chunking?
@@ -731,20 +582,20 @@ class SistemaAlertasJuridicos:
 
 ---
 
-## 📚 Referências e Links Úteis
+## 📚 **REFERÊNCIAS E LINKS ÚTEIS**
 
-### Documentação Oficial
+### **Documentação Oficial**
 - [Docling Documentation](https://docling-project.github.io/docling/)
 - [PageIndex GitHub](https://github.com/VectifyAI/PageIndex)
 - [MCP Protocol](https://modelcontextprotocol.io/)
 - [Google Colab API](https://colab.research.google.com/notebooks/io.ipynb)
 
-### Bases de Dados Jurídicas
+### **Bases de Dados Jurídicas**
 - [STF Jurisprudência](https://portal.stf.jus.br/jurisprudencia)
 - [Planalto Legislação](http://www.planalto.gov.br/ccivil_03/_Ato2011-2014)
 - [STJ Súmulas](https://scon.stj.jus.br/SCON)
 
-### Ferramentas Relacionadas
+### **Ferramentas Relacionadas**
 - [LangChain](https://python.langchain.com/) - Para chains de LLM mais complexas
 - [LlamaIndex](https://www.llamaindex.ai/) - Alternativa ao PageIndex
 - [Weaviate](https://weaviate.io/) - Vector database para implementação híbrida
