@@ -326,68 +326,57 @@ async def buscar_fontes_oficiais(self, consulta: str, max_resultados: int = 10):
 
 ## 🚀 Fluxos de Trabalho Principais
 
-### Fluxo 1: Processamento de Novo Documento
+### Fluxo 1: Download e Indexação
 ```
-1. RECEPÇÃO
-   → Documento PDF/Word/HTML é recebido
-   → Hash é calculado para integridade
-   → Metadados básicos são extraídos
+1. SISTEMA DE DOWNLOAD
+   → Coleta documentos de fontes oficiais (leis, jurisprudência, processos)
+   → Registra metadados de origem e captura
 
-2. EXTRAÇÃO ESTRUTURAL (Docling)
-   → OCR especializado (se necessário)
-   → Identificação de hierarquia (Capítulos, Artigos)
-   → Extração de tabelas e imagens com contexto
-   → Normalização de texto jurídico
+2. SISTEMA DE INDEXAÇÃO
+   → Processa documentos brutos
+   → Gera índices PageIndex (árvores hierárquicas) para raciocínio
+   → Gera índices vetoriais (embeddings) para busca semântica
+   → Consolida metadados dos documentos
 
-3. CHUNKING SEMÂNTICO
-   → Análise da estrutura identificada
-   → Decisão de estratégia de chunking
-   → Geração de chunks com sobreposição contextual
-   → Validação de qualidade de cada chunk
-
-4. INDEXAÇÃO (PageIndex)
-   → Construção de árvore hierárquica
-   → Mapeamento chunks → nós da árvore
-   → Geração de sumários para cada nó
-   → Otimização para busca por raciocínio
-
-5. PERSISTÊNCIA
-   → Salvar no Google Drive estruturado
-   → Atualizar índices globais
-   → Registrar auditoria completa
-   → Gerar relatório de processamento
+3. PERSISTÊNCIA
+   → Armazena índices no Google Drive
+   → Armazena embeddings no armazenamento vetorial
 ```
 
-### Fluxo 2: Consulta ao Sistema
+### Fluxo 2: Processamento de Consulta
 ```
-1. ANÁLISE DA CONSULTA
-   → Identificação de termos jurídicos
-   → Detecção de área do direito
-   → Expansão de sinônimos e termos relacionados
+1. ENTRADA DO USUÁRIO
+   → Consulta enviada pela interface
+   → Agente RAG identifica área do direito, complexidade e tipo
 
 2. BUSCA HÍBRIDA
-   → PageIndex: Navegação por raciocínio na árvore
-   → Fontes externas: Scraping em tempo real
-   → Cache local: Documentos já processados
-   → ChatIndex: Histórico de conversas relevantes
+   → PageIndex: busca por raciocínio na árvore
+   → Busca vetorial: similaridade semântica
+   → Combinação e ranqueamento dos resultados
 
-3. CONSOLIDAÇÃO
-   → Remoção de duplicatas
-   → Ranqueamento por relevância contextual
-   → Agrupamento por fonte e tipo
-
-4. GERAÇÃO DE RESPOSTA
-   → Contexto estruturado para o LLM
-   → Instruções específicas para resposta jurídica
-   → Validação de fatos e citações
-   → Formatação adequada para o domínio jurídico
-
-5. AUDITORIA
-   → Registro completo da consulta
-   → Log de todas as fontes consultadas
-   → Hash da resposta gerada
-   → Atualização do ChatIndex
+3. SÍNTESE E RESPOSTA
+   → Agente sintetiza contexto recuperado
+   → Geração da resposta via LLM com base no contexto
+   → Verificação da resposta contra as fontes
+   → Envio da resposta ao usuário
 ```
+
+### Fluxo 3: Armazenamento e Auditoria
+```
+1. CACHE E LOGS
+   → Consulta e resposta armazenadas no Cache Inteligente
+   → Logs detalhados no Sistema de Logs
+
+2. BACKUP E RELATÓRIOS
+   → Dados salvos no Google Drive para backup e auditoria
+   → Relatórios gerados pelo Sistema de Monitoramento
+```
+
+### Considerações de Escalabilidade e Performance
+- **Cache Inteligente**: reduz latência para consultas similares e diminui carga nas APIs.
+- **Processamento Paralelo**: download e indexação usam ThreadPoolExecutor para múltiplos documentos.
+- **Arquitetura Modular**: cada componente escala de forma independente (ex.: armazenamento vetorial).
+- **Fallbacks**: múltiplos fallbacks (modelos locais, dados de exemplo) garantem disponibilidade.
 
 ---
 
