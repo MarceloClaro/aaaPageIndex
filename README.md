@@ -74,6 +74,8 @@ PageIndex powers a reasoning-based RAG system that achieved **state-of-the-art**
 
 To learn more, please see a detailed introduction of the [PageIndex framework](https://pageindex.ai/blog/pageindex-intro). Check out this GitHub repo for open-source code, and the [cookbooks](https://docs.pageindex.ai/cookbook), [tutorials](https://docs.pageindex.ai/tutorials), and [blog](https://pageindex.ai/blog) for additional usage guides and examples. 
 
+Looking for a full Portuguese-language architecture walkthrough for a legal-domain deployment? See [Documentação Técnica Completa - Sistema Jurídico RAG Avançado](docs/sistema_juridico_rag_avancado.md).
+
 The PageIndex service is available as a ChatGPT-style [chat platform](https://chat.pageindex.ai), or can be integrated via [MCP](https://pageindex.ai/mcp) or [API](https://docs.pageindex.ai/quickstart).
 
 ### 🛠️ Deployment Options
@@ -85,6 +87,7 @@ The PageIndex service is available as a ChatGPT-style [chat platform](https://ch
 
 - Try the [**Vectorless RAG**](https://github.com/VectifyAI/PageIndex/blob/main/cookbook/pageindex_RAG_simple.ipynb) notebook — a *minimal*, hands-on example of reasoning-based RAG using PageIndex.
 - Experiment with [*Vision-based Vectorless RAG*](https://github.com/VectifyAI/PageIndex/blob/main/cookbook/vision_RAG_pageindex.ipynb) — no OCR; a minimal, reasoning-native RAG pipeline that works directly over page images.
+- Explore the [**Sistema Jurídico RAG Avançado**](https://github.com/VectifyAI/PageIndex/blob/main/tutorials/juridico_rag_unificado.ipynb) notebook — an end-to-end legal-domain architecture walkthrough with a robust chat flow.
   
 <div align="center">
   <a href="https://colab.research.google.com/github/VectifyAI/PageIndex/blob/main/cookbook/pageindex_RAG_simple.ipynb" target="_blank" rel="noopener">
